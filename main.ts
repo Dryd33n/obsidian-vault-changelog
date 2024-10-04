@@ -117,6 +117,7 @@ export default class Changelog extends Plugin {
 
 interface ChangelogSettings {
   changelogFilePath: string;
+  changelogTags: string;
   numberOfFilesToShow: number;
   watchVaultChange: boolean;
 }
@@ -148,6 +149,20 @@ class ChangelogSettingsTab extends PluginSettingTab {
             this.plugin.saveSettings();
           });
       });
+
+      new Setting(containerEl)
+      .setName("Changelog note tags")
+      .setDesc("Comma seperated list of tags to be added to changelog note")
+      .addText((text) => {
+        text
+          .setPlaceholder("Example: changelog, graphExclude")
+          .setValue(settings.changelogTags)
+          .onChange((value) => {
+            settings.changelogTags = value;
+            this.plugin.saveSettings();
+          });
+      });
+
 
     new Setting(containerEl)
       .setName("Number of recent files in changelog")
