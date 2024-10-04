@@ -83,6 +83,7 @@ export default class Changelog extends Plugin {
       .sort((a, b) => (a.stat.mtime < b.stat.mtime ? 1 : -1))
       .slice(0, this.settings.numberOfFilesToShow);
     let changelogContent = ``;
+    changelogContent += this.buildTags();
     for (let recentlyEditedFile of recentlyEditedFiles) {
       // TODO: make date format configurable (and validate it)
       const humanTime = window
@@ -92,6 +93,16 @@ export default class Changelog extends Plugin {
     }
     return changelogContent;
   }
+
+  buildTags(): string{
+    let tags = '---\ntags:\n0';
+    let tagArr = this.settings.changelogTags.split(',');
+    tagArr.forEach((tag) => tags.concat("  - ",tag,"\n"));
+    tagArr.concat('---\n');
+
+    return tags;
+  }
+  
 
   async writeInFile(filePath: string, content: string) {
     const file = this.app.vault.getAbstractFileByPath(filePath);
@@ -194,3 +205,4 @@ class ChangelogSettingsTab extends PluginSettingTab {
       );
   }
 }
+
